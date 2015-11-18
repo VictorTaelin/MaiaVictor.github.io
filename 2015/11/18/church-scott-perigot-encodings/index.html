@@ -13,7 +13,7 @@ Church EncodingThe Church Encoding, which represents data structur">
 <meta property="og:site_name" content="MaiaVictor">
 <meta property="og:description" content="When it comes to encoding data on the pure λ-calculus (without complex extensions such as ADTs), there are 3 widely used approaches. 
 Church EncodingThe Church Encoding, which represents data structur">
-<meta property="og:updated_time" content="2015-11-18T13:39:14.000Z">
+<meta property="og:updated_time" content="2015-11-18T13:39:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alternative to the Church, Scott and Perigot encodings of data on the Lambda Calculus.">
 <meta name="twitter:description" content="When it comes to encoding data on the pure λ-calculus (without complex extensions such as ADTs), there are 3 widely used approaches. 
@@ -105,7 +105,7 @@ Church EncodingThe Church Encoding, which represents data structur">
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f (f x -&gt; (f (f (f x)))) (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>We can make it easier to read using church-number literals:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f c1 (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f c2 (f c -&gt; (f c1 (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f c3 (f x -&gt; (f c2 (f x -&gt; (f c1 (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
-<p>Where the literals are Church-encoded nats, which allows we to see that it is just the Scott encoding with Church-numbers stored inbetween. Which can be stated as merely a Scott-encoded list of Church-encoded numerals. This allows us to get pred in constant time (just take the tail of the list), and foldr without recursion (just take the head of the list).</p>
+<p>This allows us to see that it is just the Scott encoding with Church-numbers stored inbetween. Which can be stated as merely a Scott-encoded list of Church-encoded numerals. This allows us to get pred in constant time (just take the tail of the list), and foldr without recursion (just take the head of the list).</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (_ pred -&gt; pred) _)) <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (nat -&gt; (nat (fold _ -&gt; fold) _)) <span class="comment">-- Non-recursive. Good.</span></span><br></pre></td></tr></table></figure>
 <p>But the <strong>Perigot Encoding</strong> has its own problem: terms take quadratic amount of space. </p>
 <h3 id="Alternative_Encoding">Alternative Encoding</h3><p>There is another encoding which take all good properties from the previous, but I’ve never seen on literature. This is it:</p>
@@ -117,7 +117,7 @@ Church EncodingThe Church Encoding, which represents data structur">
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4uv9n40000kq6nslkhmmpt" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4uvwvv0000ky6n8xsaw4b0" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/#disqus_thread" class="article-comment-link">Comments</a>
       
