@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/18/church-scott-perigot-encodings/">Alternative to the Church, Scott and Perigot encodings of data on the Lambda Calculus.</a>
+      <a class="article-title" href="/2015/11/18/church-scott-perigot-encodings/">Alternative to the Church, Scott and Parigot encodings of data on the Lambda Calculus.</a>
     </h1>
   
 
@@ -99,23 +99,23 @@
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">s0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">s1</span> = (f x -&gt; (f (f x -&gt; x)))</span><br><span class="line"><span class="title">s2</span> = (f x -&gt; (f (f x -&gt; (f (f x -&gt; x)))))</span><br><span class="line"><span class="title">s3</span> = (f x -&gt; (f (f x -&gt; (f (f x -&gt; (f (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>With this representation, we get constant-time pattern-matching, but we need general recursion to implement <code>foldr</code>. That means we can’t implement <code>foldNat</code> in a total language, and no implementation of <code>foldNat</code> for Scott-encoded structures has a beta normal form.</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (pred -&gt; pred) _))                       <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (s z nat -&gt; (nat (pred -&gt; (s (foldNat s z pred))) z)) <span class="comment">-- Recursive. Also, WTF.</span></span><br></pre></td></tr></table></figure>
-<h3 id="Perigot_Encoding">Perigot Encoding</h3><p>To solve even this issue, the Perigot encoding is sometimes used. It works like a combination of the Church and Scott encodings:</p>
+<h3 id="Parigot_Encoding">Parigot Encoding</h3><p>To solve even this issue, the Parigot encoding is sometimes used. It works like a combination of the Church and Scott encodings:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f (f x -&gt; (f (f (f x)))) (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>We can make it easier to read using church-number literals:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f c1 (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f c2 (f c -&gt; (f c1 (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f c3 (f x -&gt; (f c2 (f x -&gt; (f c1 (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>This allows us to see that it is just the Scott encoding with Church-numbers stored inbetween - or, if you prefer, a Scott-encoded list of Church-encoded naturals. This allows us to get pred in constant time (just take the tail of the list), and foldr without recursion (just take the head of the list).</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (_ pred -&gt; pred) _)) <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (nat -&gt; (nat (fold _ -&gt; fold) _)) <span class="comment">-- Non-recursive. Good.</span></span><br></pre></td></tr></table></figure>
-<p>But the <strong>Perigot Encoding</strong> has its own problem: terms take quadratic amount of space. </p>
+<p>But the <strong>Parigot Encoding</strong> has its own problem: terms take quadratic amount of space. </p>
 <h3 id="Alternative_Encoding">Alternative Encoding</h3><p>There is another encoding which combines all good properties from the previous, but I’ve never seen on literature. This is it:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">a0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">a1</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">a2</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">a3</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
-<p>Like Perigot encoding, this uses a Scott-list. Instead of Church-numbers, we store continuators, <code>(c -&gt; (c f x))</code>. Each continuator gives us fuel to fold to the next <code>pred</code> - all the way to <code>zero</code>, where there isn’t fuel anymore, so the term has to halt. Pred is still just <code>tail</code> (<code>O(1)</code>), and there is a non-recursive implementation of <code>foldNat</code> with a beta normal form.</p>
+<p>Like Parigot encoding, this uses a Scott-list. Instead of Church-numbers, we store continuators, <code>(c -&gt; (c f x))</code>. Each continuator gives us fuel to fold to the next <code>pred</code> - all the way to <code>zero</code>, where there isn’t fuel anymore, so the term has to halt. Pred is still just <code>tail</code> (<code>O(1)</code>), and there is a non-recursive implementation of <code>foldNat</code> with a beta normal form.</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">foldNat</span> = (s z nat -&gt; (nat (cont pred -&gt; (s (cont pred))) z)) <span class="comment">-- Non-recursive. Good.</span></span><br><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (_ pred -&gt; pred) _))                   <span class="comment">-- O(1). Good.</span></span><br></pre></td></tr></table></figure>
-<p>It can easily be extended to arbitrary data-types and, differently from the Perigot encoding, terms take linear space. That looks like a decent solution. Was this proposed? Is there any merit on that kind of encoding?</p>
+<p>It can easily be extended to arbitrary data-types and, differently from the Parigot encoding, terms take linear space. That looks like a decent solution. Was this proposed? Is there any merit on that kind of encoding?</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4v2ikd0000mo6ncomvpj0n" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4x001l0000qq6nanwzwqze" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -171,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4v2il40001mo6naau263xa" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4x002d0001qq6ny0z017p8" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -210,7 +210,7 @@
       <ul>
         
           <li>
-            <a href="/2015/11/18/church-scott-perigot-encodings/">Alternative to the Church, Scott and Perigot encodings of data on the Lambda Calculus.</a>
+            <a href="/2015/11/18/church-scott-perigot-encodings/">Alternative to the Church, Scott and Parigot encodings of data on the Lambda Calculus.</a>
           </li>
         
           <li>
