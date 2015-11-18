@@ -103,7 +103,7 @@
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f (f x -&gt; (f (f (f x)))) (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>We can make it easier to read using church-number literals:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f c1 (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f c2 (f c -&gt; (f c1 (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f c3 (f x -&gt; (f c2 (f x -&gt; (f c1 (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
-<p>This allows us to see that it is just the Scott encoding with Church-numbers stored inbetween - or, if you prefer, a Scott-encoded list of Church-encoded numerals. This allows us to get pred in constant time (just take the tail of the list), and foldr without recursion (just take the head of the list).</p>
+<p>This allows us to see that it is just the Scott encoding with Church-numbers stored inbetween - or, if you prefer, a Scott-encoded list of Church-encoded naturals. This allows us to get pred in constant time (just take the tail of the list), and foldr without recursion (just take the head of the list).</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (_ pred -&gt; pred) _)) <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (nat -&gt; (nat (fold _ -&gt; fold) _)) <span class="comment">-- Non-recursive. Good.</span></span><br></pre></td></tr></table></figure>
 <p>But the <strong>Perigot Encoding</strong> has its own problem: terms take quadratic amount of space. </p>
 <h3 id="Alternative_Encoding">Alternative Encoding</h3><p>There is another encoding which take all good properties from the previous, but I’ve never seen on literature. This is it:</p>
@@ -115,7 +115,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4uw7q60000l66nfg5vldx4" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4uwcxm0000lc6nhuzrb5wc" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -171,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4uw7qx0001l66n7hkq9ova" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4uwcye0001lc6nbghvq94x" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/#disqus_thread" class="article-comment-link">Comments</a>
       
