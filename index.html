@@ -98,7 +98,7 @@
 <h3 id="Scott_Encoding">Scott Encoding</h3><p>O(N) pred is considered bad, and solved by the <strong>Scott Encoding</strong>, which represents data structures as their pattern-match. Here is 3 again:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">s0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">s1</span> = (f x -&gt; (f (f x -&gt; x)))</span><br><span class="line"><span class="title">s2</span> = (f x -&gt; (f (f x -&gt; (f (f x -&gt; x)))))</span><br><span class="line"><span class="title">s3</span> = (f x -&gt; (f (f x -&gt; (f (f x -&gt; (f (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>With this representation, we get constant-time pattern-matching, but we need general recursion to implement <code>foldr</code>. That means we can’t implement <code>foldNat</code> in a total language, and no implementation of <code>foldNat</code> for Scott-encoded structures has a beta normal form.</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (pred -&gt; pred) _))                  <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (s z nat -&gt; (nat (pred -&gt; (s (fn s z pred))) z)) <span class="comment">-- Recursive. Also, WTF.</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (pred -&gt; pred) _))                       <span class="comment">-- O(1). Good.</span></span><br><span class="line"><span class="title">foldNat</span> = (s z nat -&gt; (nat (pred -&gt; (s (foldNat s z pred))) z)) <span class="comment">-- Recursive. Also, WTF.</span></span><br></pre></td></tr></table></figure>
 <h3 id="Perigot_Encoding">Perigot Encoding</h3><p>To solve even this issue, the Perigot encoding is sometimes used. It works like a combination of the Church and Scott encodings:</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">p1</span> = (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">p2</span> = (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">p3</span> = (f x -&gt; (f (f x -&gt; (f (f (f x)))) (f x -&gt; (f (f x -&gt; (f (f x))) (f x -&gt; (f (f x -&gt; (f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>We can make it easier to read using church-number literals:</p>
@@ -115,7 +115,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4us7s30000kb6ny95zsd6i" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4uv9n40000kq6nslkhmmpt" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -171,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4us7st0001kb6np7a59ftp" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4uv9o30001kq6ng285ae5v" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/#disqus_thread" class="article-comment-link">Comments</a>
       
