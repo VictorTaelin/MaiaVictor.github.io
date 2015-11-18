@@ -110,12 +110,12 @@
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">a0</span> = (f x -&gt; x)</span><br><span class="line"><span class="title">a1</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))</span><br><span class="line"><span class="title">a2</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))))</span><br><span class="line"><span class="title">a3</span> = (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; (f (c -&gt; (c f x)) (f x -&gt; x)))))))</span><br></pre></td></tr></table></figure>
 <p>Like Perigot encoding, this uses a Scott-list. Instead of Church-numbers, we store continuators, <code>(c -&gt; (c f x))</code>. Each continuator gives us fuel to fold to the next <code>pred</code> - all the way to <code>zero</code>, where there isn’t fuel anymore, so the term has to halt. Pred is still just <code>tail</code> (<code>O(1)</code>), and there is a non-recursive implementation of <code>foldNat</code> with a beta normal form.</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">foldNat</span> = (s z nat -&gt; (nat (cont pred -&gt; (s (cont pred))) z)) <span class="comment">-- Non-recursive. Good.</span></span><br><span class="line"><span class="title">pred</span>    = (nat -&gt; (nat (_ pred -&gt; pred) _))                   <span class="comment">-- O(1). Good.</span></span><br></pre></td></tr></table></figure>
-<p>And, differently from the Perigot encoding, terms take linear space. It can easily be extended to arbitrary data-types. That looks like a decent solution. Was this proposed? Is there any merit on that kind of encoding?</p>
+<p>It can easily be extended to arbitrary data-types and, differently from the Perigot encoding, terms take linear space. That looks like a decent solution. Was this proposed? Is there any merit on that kind of encoding?</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4v0ywu0000ma6n836hxnha" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/" data-id="cih4v19cl0000mh6nleh4xjit" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/11/18/church-scott-perigot-encodings/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -171,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4v0yxj0001ma6n7s5ejsre" class="article-share-link">Share</a>
+      <a data-url="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/" data-id="cih4v19da0001mh6n0pe7i6su" class="article-share-link">Share</a>
       
         <a href="http://maiavictor.github.io/2015/10/20/LJSON-now-has-a-safe-parser/#disqus_thread" class="article-comment-link">Comments</a>
       
